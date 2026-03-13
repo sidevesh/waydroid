@@ -24,7 +24,7 @@ config_keys = ["arch",
                "suspend_action",
                "mount_overlays",
                "auto_adb",
-               "background_start"]
+               "multi_windows_show_boot_animation"]
 
 # Config file/commandline default values
 # $WORK gets replaced with the actual value for args.work (which may be
@@ -42,7 +42,7 @@ defaults = {
     "suspend_action": "freeze",
     "mount_overlays": "True",
     "auto_adb": "False",
-    "background_start": "False",
+    "multi_windows_show_boot_animation": "False",
     "container_xdg_runtime_dir": "/run/xdg",
     "container_wayland_display": "wayland-0",
 }
