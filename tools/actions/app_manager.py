@@ -74,11 +74,11 @@ def maybeLaunchLater(args, launchNow):
         tools.actions.session_manager.start(args, launchNow, background=background_start)
 
 def _update_background_start_from_multiwin(args, multiwin):
-    background_start = "True" if multiwin != "false" else "False"
-    cfg = tools.config.load(args)
-    if cfg["waydroid"].get("background_start", "False") != background_start:
-        cfg["waydroid"]["background_start"] = background_start
-        tools.config.save(args, cfg)
+    if multiwin != "false":
+        cfg = tools.config.load(args)
+        if cfg["waydroid"].get("background_start", "False") != "True":
+            cfg["waydroid"]["background_start"] = "True"
+            tools.config.save(args, cfg)
 
 def launch(args):
     def justLaunch():
