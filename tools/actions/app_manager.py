@@ -71,13 +71,6 @@ def maybeLaunchLater(args, launchNow, background=False):
         logging.error("Starting waydroid session")
         tools.actions.session_manager.start(args, launchNow, background=background)
 
-def _update_multi_windows_show_boot_animation(args, multiwin):
-    if multiwin != "false":
-        cfg = tools.config.load(args)
-        if cfg["waydroid"].get("multi_windows_show_boot_animation", "False") != "True":
-            cfg["waydroid"]["multi_windows_show_boot_animation"] = "True"
-            tools.config.save(args, cfg)
-
 def launch(args):
     cfg = tools.config.load(args)
     background = cfg["waydroid"].get("multi_windows_show_boot_animation", "False") == "True"
@@ -94,7 +87,6 @@ def launch(args):
             else:
                 platformService.settingsPutString(
                     2, "policy_control", "immersive.full=*")
-            _update_multi_windows_show_boot_animation(args, multiwin)
         else:
             logging.error("Failed to access IPlatform service")
     maybeLaunchLater(args, justLaunch, background)
@@ -160,7 +152,6 @@ def intent(args):
             else:
                 platformService.settingsPutString(
                     2, "policy_control", "immersive.full=*")
-            _update_multi_windows_show_boot_animation(args, multiwin)
         else:
             logging.error("Failed to access IPlatform service")
     maybeLaunchLater(args, justLaunch, background)
