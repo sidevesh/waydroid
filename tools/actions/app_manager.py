@@ -69,7 +69,16 @@ def maybeLaunchLater(args, launchNow):
         launchNow()
     except dbus.DBusException:
         logging.error("Starting waydroid session")
-        tools.actions.session_manager.start(args, launchNow, background=False)
+        cfg = tools.config.load(args)
+        background_start = cfg["waydroid"].get("background_start", "False") == "True"
+        tools.actions.session_manager.start(args, launchNow, background=background_start)
+
+def _update_background_start_from_multiwin(args, multiwin):
+    background_start = "True" if multiwin != "false" else "False"
+    cfg = tools.config.load(args)
+    if cfg["waydroid"].get("background_start", "False") != background_start:
+        cfg["waydroid"]["background_start"] = background_start
+        tools.config.save(args, cfg)
 
 def launch(args):
     def justLaunch():
@@ -85,6 +94,7 @@ def launch(args):
             else:
                 platformService.settingsPutString(
                     2, "policy_control", "immersive.full=*")
+            _update_background_start_from_multiwin(args, multiwin)
         else:
             logging.error("Failed to access IPlatform service")
     maybeLaunchLater(args, justLaunch)
@@ -148,6 +158,7 @@ def intent(args):
             else:
                 platformService.settingsPutString(
                     2, "policy_control", "immersive.full=*")
+            _update_background_start_from_multiwin(args, multiwin)
         else:
             logging.error("Failed to access IPlatform service")
     maybeLaunchLater(args, justLaunch)
